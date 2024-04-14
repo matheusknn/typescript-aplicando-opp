@@ -6,7 +6,7 @@ import { Transacao } from "./Transacao.js";
 export class Conta {
   protected nome: string;
   protected saldo: number = Armazenador.obter("saldo") || 0;
-  private transacoes: Transacao[] = JSON.parse(localStorage.getItem("transacoes"), (key: string, value: any) => {
+  private transacoes: Transacao[] = Armazenador.obter(("transacoes"), (key: string, value: any) => {
     if (key === "data") {
       return new Date(value);
     }
@@ -64,7 +64,7 @@ export class Conta {
 
     this.transacoes.push(novaTransacao);
     console.log(this.getGruposTransacoes());
-    localStorage.setItem("transacoes", JSON.stringify(this.transacoes));
+    Armazenador.salvar("transacoes", JSON.stringify(this.transacoes));
   }
 
   debitar(valor: number): void {
@@ -76,7 +76,7 @@ export class Conta {
     }
 
     this.saldo -= valor;
-    localStorage.setItem("saldo", this.saldo.toString());
+    Armazenador.salvar("saldo", this.saldo.toString());
   }
 
   depositar(valor: number): void {
@@ -85,7 +85,7 @@ export class Conta {
     }
 
     this.saldo += valor;
-    localStorage.setItem("saldo", this.saldo.toString());
+    Armazenador.salvar("saldo", this.saldo.toString());
   }
 
 }
